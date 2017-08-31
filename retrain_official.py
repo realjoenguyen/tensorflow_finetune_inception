@@ -1054,6 +1054,7 @@ def main(_):
             decoded_image_tensor, resized_image_tensor, bottleneck_tensor,
             FLAGS.architecture))
 
+  print len(test_bottlenecks)
     test_accuracy, predictions = sess.run(
         [evaluation_step, prediction],
         feed_dict={bottleneck_input: test_bottlenecks,
