@@ -229,7 +229,7 @@ def get_bottleneck_path(image_lists, label_name, index, bottleneck_dir,
     File system path string to an image that meets the requested parameters.
   """
   return get_image_path(image_lists, label_name, index, bottleneck_dir,
-                        category) + '_' + architecture + '.txt'
+                        category) + '.txt'
 
 
 def create_model_graph(model_info):
