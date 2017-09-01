@@ -1061,14 +1061,16 @@ def main(_):
         [evaluation_step, prediction],
         feed_dict={bottleneck_input: test_bottlenecks,
                    ground_truth_input: test_ground_truth})
-    tf.logging.info('Final test accuracy = %.1f%% (N=%d)' %
-                    (test_accuracy * 100, len(test_bottlenecks)))
+    # tf.logging.info('Final test accuracy = %.1f%% (N=%d)' %
+    #                 (test_accuracy * 100, len(test_bottlenecks)))
+    print ('Final test accuracy = %.1f%% (N=%d)' %
+     (test_accuracy * 100, len(test_bottlenecks)))
 
     if FLAGS.print_misclassified_test_images:
       tf.logging.info('=== MISCLASSIFIED TEST IMAGES ===')
       for i, test_filename in enumerate(test_filenames):
         if predictions[i] != test_ground_truth[i].argmax():
-          tf.logging.info('%70s  %s' %
+          print('%70s  %s' %
                           (test_filename,
                            list(image_lists.keys())[predictions[i]]))
 
