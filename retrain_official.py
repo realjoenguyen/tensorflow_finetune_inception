@@ -152,7 +152,8 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
     for file_name in file_list:
       base_name = os.path.basename(file_name)
       # We want to ignore anything after '_nohash_' in the file name when
-      # deciding which set to put an image in, the data set creator has a way of
+      # deciding which set to put an image in, the data set creator has a way o
+
       # grouping photos that are close variations of each other. For example
       # this is used in the plant disease data set to group multiple pictures of
       # the same leaf.
@@ -897,6 +898,7 @@ def add_jpeg_decoding(input_width, input_height, input_depth, input_mean,
 
 
 def main(_):
+  print('TUAN ANH')
   # Needed to make sure the logging output is visible.
   # See https://github.com/tensorflow/tensorflow/issues/3047
   tf.logging.set_verbosity(tf.logging.INFO)
@@ -1061,7 +1063,6 @@ def main(_):
                    ground_truth_input: test_ground_truth})
     tf.logging.info('Final test accuracy = %.1f%% (N=%d)' %
                     (test_accuracy * 100, len(test_bottlenecks)))
-
 
     if FLAGS.print_misclassified_test_images:
       tf.logging.info('=== MISCLASSIFIED TEST IMAGES ===')
