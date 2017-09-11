@@ -1063,9 +1063,10 @@ def main(_):
 					tf.logging.info('%70s	%s' %
 													(test_filename,
 													 list(image_lists.keys())[predictions[i]]))
-		print (sklearn.metrics.classification_report(test_ground_truth, predictions))
-		print (sklearn.metrics.precision_score(test_ground_truth, predictions))
-		print(sklearn.metrics.recall_score(test_ground_truth, predictions))
+		from sklearn.metrics import accuracy_score, classification_report, recall_score, precision_score
+		print (classification_report(test_ground_truth, predictions))
+		print (precision_score(test_ground_truth, predictions))
+		print(recall_score(test_ground_truth, predictions))
 
 		# Write out the trained graph and labels with the weights stored as
 		# constants.
