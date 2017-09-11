@@ -1066,8 +1066,8 @@ def main(_):
 		true_labels = [e.argmax() for e in test_ground_truth]
 		from sklearn.metrics import accuracy_score, classification_report, recall_score, precision_score
 		print (classification_report(true_labels, predictions))
-		print (precision_score(true_labels, predictions))
-		print(recall_score(true_labels, predictions))
+		print (precision_score(true_labels, predictions, average='macro'))
+		print(recall_score(true_labels, predictions, average='macro'))
 
 		# Write out the trained graph and labels with the weights stored as
 		# constants.
