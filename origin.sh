@@ -8,7 +8,8 @@ python origin_retrain.py \
 --test_batch_size 10 \
 --learning_rate 0.05 \
 --validation_percentage 1 \
---testing_percentage 15
+--testing_percentage 15 \
+--print_misclassified_test_images True
 
 #--image_dir /home/ta/Projects/brand_safety/crawler/images/finetune_inception/flower_photos \
 
