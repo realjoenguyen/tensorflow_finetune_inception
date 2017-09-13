@@ -759,7 +759,7 @@ def add_evaluation_step(result_tensor, ground_truth_tensor):
 		with tf.name_scope('precision'):
 			# evaluation_step = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 			evaluation_step = tf.metrics.precision(true_labels, prediction)
-	tf.summary.scalar('precision', evaluation_step)
+	# tf.summary.scalar('precision', evaluation_step)
 	return evaluation_step, prediction
 
 
