@@ -919,6 +919,7 @@ def main(_):
 			create_model_graph(model_info))
 
 	# Look at the folder structure, and create lists of all the images.
+	print ('At ', FLAGS.image_dir)
 	image_lists = create_image_lists(FLAGS.image_dir, FLAGS.testing_percentage,
 																	 FLAGS.validation_percentage)
 	class_count = len(image_lists.keys())
@@ -935,7 +936,7 @@ def main(_):
 	do_distort_images = should_distort_images(
 			FLAGS.flip_left_right, FLAGS.random_crop, FLAGS.random_scale,
 			FLAGS.random_brightness)
-	print (FLAGS.flip_left_right) 
+	print (FLAGS.flip_left_right)
 	print ('do_distort_images=', do_distort_images)
 
 	with tf.Session(graph=graph) as sess:
