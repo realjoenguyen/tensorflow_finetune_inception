@@ -935,6 +935,7 @@ def main(_):
 	do_distort_images = should_distort_images(
 			FLAGS.flip_left_right, FLAGS.random_crop, FLAGS.random_scale,
 			FLAGS.random_brightness)
+	print ('do_distort_images=', do_distort_images)
 
 	with tf.Session(graph=graph) as sess:
 		# Set up the image decoding sub-graph.
