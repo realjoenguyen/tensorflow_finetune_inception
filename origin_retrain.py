@@ -748,7 +748,7 @@ def add_evaluation_step(result_tensor, ground_truth_tensor):
 	Returns:
 		Tuple of (evaluation step, prediction).
 	"""
-	with tf.name_scope('precision'):
+	with tf.name_scope('evaluation'):
 		with tf.name_scope('correct_prediction'):
 			prediction = tf.argmax(result_tensor, 1)
 			true_labels = tf.argmax(ground_truth_tensor, 1)
@@ -758,7 +758,7 @@ def add_evaluation_step(result_tensor, ground_truth_tensor):
 					prediction, tf.argmax(ground_truth_tensor, 1))
 		with tf.name_scope('precision'):
 			# evaluation_step = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-			evaluation_step = tf.metrics.precision(tf.argmax(ground_truth_tensor, 1), prediction)
+			evaluation_step = tf.metrics.precision(true_labels, prediction)
 	tf.summary.scalar('precision', evaluation_step)
 	return evaluation_step, prediction
 
