@@ -751,6 +751,9 @@ def add_evaluation_step(result_tensor, ground_truth_tensor):
 	with tf.name_scope('precision'):
 		with tf.name_scope('correct_prediction'):
 			prediction = tf.argmax(result_tensor, 1)
+			true_labels = tf.argmax(ground_truth_tensor, 1)
+			print (prediction.shape)
+			print (true_labels.shape)
 			correct_prediction = tf.equal(
 					prediction, tf.argmax(ground_truth_tensor, 1))
 		with tf.name_scope('precision'):
