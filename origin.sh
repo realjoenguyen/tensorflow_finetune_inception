@@ -1,7 +1,8 @@
-
 #!/bin/bash
+. ./set_path.sh
+
 python origin_retrain.py \
---image_dir /home/ta/Projects/brand_safety/crawler/images/data/total_images/ \
+--image_dir ${IMAGE_DIR} \
 --how_many_training_steps 100000 \
 --train_batch_size 10 \
 --validation_batch_size 10 \
