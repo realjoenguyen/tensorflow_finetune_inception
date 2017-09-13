@@ -423,7 +423,7 @@ def cache_bottlenecks(sess, image_lists, image_dir, bottleneck_dir,
 	Returns:
 		Nothing.
 	"""
-	print ('Creating...') 
+	print ('Creating...')
 	how_many_bottlenecks = 0
 	ensure_dir_exists(bottleneck_dir)
 	for label_name, label_lists in image_lists.items():
@@ -752,8 +752,8 @@ def add_evaluation_step(result_tensor, ground_truth_tensor):
 		with tf.name_scope('correct_prediction'):
 			prediction = tf.argmax(result_tensor, 1)
 			true_labels = tf.argmax(ground_truth_tensor, 1)
-			# print (prediction.shape)
-			# print (true_labels.shape)
+			print (tf.shape(prediction))
+			print (tf.shape(true_labels))
 			correct_prediction = tf.equal(
 					prediction, tf.argmax(ground_truth_tensor, 1))
 		with tf.name_scope('precision'):
