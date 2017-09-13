@@ -50,7 +50,7 @@ images. The label for each image is taken from the name of the subfolder it's
 in.
 This produces a new model file that can be loaded and run by any TensorFlow
 program, for example the label_image sample code.
-By default this script will use the high accuracy, but comparatively large and
+By default this script will use the high precision, but comparatively large and
 slow Inception v3 model architecture. It's recommended that you start with this
 to validate that you have gathered good training data, but if you want to deploy
 on resource-limited platforms, you can try the `--architecture` flag with a
@@ -740,7 +740,7 @@ def add_final_training_ops(class_count, final_tensor_name, bottleneck_tensor,
 
 
 def add_evaluation_step(result_tensor, ground_truth_tensor):
-	"""Inserts the operations we need to evaluate the accuracy of our results.
+	"""Inserts the operations we need to evaluate the precision of our results.
 	Args:
 		result_tensor: The new final node that produces results.
 		ground_truth_tensor: The node we feed ground truth data
@@ -748,14 +748,15 @@ def add_evaluation_step(result_tensor, ground_truth_tensor):
 	Returns:
 		Tuple of (evaluation step, prediction).
 	"""
-	with tf.name_scope('accuracy'):
+	with tf.name_scope('precision'):
 		with tf.name_scope('correct_prediction'):
 			prediction = tf.argmax(result_tensor, 1)
 			correct_prediction = tf.equal(
 					prediction, tf.argmax(ground_truth_tensor, 1))
-		with tf.name_scope('accuracy'):
-			evaluation_step = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-	tf.summary.scalar('accuracy', evaluation_step)
+		with tf.name_scope('precision'):
+			# evaluation_step = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+			evaluation_step = tf.metrics.precision(ground_truth_tensor, prediction)
+	tf.summary.scalar('precision', evaluation_step)
 	return evaluation_step, prediction
 
 
@@ -961,7 +962,7 @@ def main(_):
 				 len(image_lists.keys()), FLAGS.final_tensor_name, bottleneck_tensor,
 				 model_info['bottleneck_tensor_size'])
 
-		# Create the operations we need to evaluate the accuracy of our new layer.
+		# Create the operations we need to evaluate the precision of our new layer.
 		evaluation_step, prediction = add_evaluation_step(
 				final_tensor, ground_truth_input)
 
@@ -1005,12 +1006,12 @@ def main(_):
 			# Every so often, print out how well the graph is training.
 			is_last_step = (i + 1 == FLAGS.how_many_training_steps)
 			if (i % FLAGS.eval_step_interval) == 0 or is_last_step:
-				train_accuracy, cross_entropy_value = sess.run(
+				train_precision, cross_entropy_value = sess.run(
 						[evaluation_step, cross_entropy],
 						feed_dict={bottleneck_input: train_bottlenecks,
 											 ground_truth_input: train_ground_truth})
-				tf.logging.info('%s: Step %d: Train accuracy = %.1f%%' %
-												(datetime.now(), i, train_accuracy * 100))
+				tf.logging.info('%s: Step %d: Train precision = %.1f%%' %
+												(datetime.now(), i, train_precision * 100))
 				tf.logging.info('%s: Step %d: Cross entropy = %f' %
 												(datetime.now(), i, cross_entropy_value))
 				validation_bottlenecks, validation_ground_truth, _ = (
@@ -1021,13 +1022,13 @@ def main(_):
 								FLAGS.architecture))
 				# Run a validation step and capture training summaries for TensorBoard
 				# with the `merged` op.
-				validation_summary, validation_accuracy = sess.run(
+				validation_summary, validation_precision = sess.run(
 						[merged, evaluation_step],
 						feed_dict={bottleneck_input: validation_bottlenecks,
 											 ground_truth_input: validation_ground_truth})
 				validation_writer.add_summary(validation_summary, i)
-				tf.logging.info('%s: Step %d: Validation accuracy = %.1f%% (N=%d)' %
-												(datetime.now(), i, validation_accuracy * 100,
+				tf.logging.info('%s: Step %d: Validation precision = %.1f%% (N=%d)' %
+												(datetime.now(), i, validation_precision * 100,
 												 len(validation_bottlenecks)))
 
 			# Store intermediate results
@@ -1049,12 +1050,12 @@ def main(_):
 						FLAGS.bottleneck_dir, FLAGS.image_dir, jpeg_data_tensor,
 						decoded_image_tensor, resized_image_tensor, bottleneck_tensor,
 						FLAGS.architecture))
-		test_accuracy, predictions = sess.run(
+		test_precision, predictions = sess.run(
 				[evaluation_step, prediction],
 				feed_dict={bottleneck_input: test_bottlenecks,
 									 ground_truth_input: test_ground_truth})
-		tf.logging.info('Final test accuracy = %.1f%% (N=%d)' %
-										(test_accuracy * 100, len(test_bottlenecks)))
+		tf.logging.info('Final test precision = %.1f%% (N=%d)' %
+										(test_precision * 100, len(test_bottlenecks)))
 
 		if FLAGS.print_misclassified_test_images:
 			tf.logging.info('=== MISCLASSIFIED TEST IMAGES ===')
@@ -1064,7 +1065,7 @@ def main(_):
 													(test_filename,
 													 list(image_lists.keys())[predictions[i]]))
 		true_labels = [e.argmax() for e in test_ground_truth]
-		from sklearn.metrics import accuracy_score, classification_report, recall_score, precision_score
+		from sklearn.metrics import precision_score, classification_report, recall_score, precision_score
 		print (classification_report(true_labels, predictions))
 		print (precision_score(true_labels, predictions, average='macro'))
 		print(recall_score(true_labels, predictions, average='macro'))
@@ -1159,7 +1160,7 @@ if __name__ == '__main__':
 			default=10,
 			help="""\
 			How many images to test on. This test set is only used once, to evaluate
-			the final accuracy of the model after training completes.
+			the final precision of the model after training completes.
 			A value of -1 causes the entire test set to be used, which leads to more
 			stable results across runs.\
 			"""
