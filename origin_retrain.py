@@ -935,6 +935,7 @@ def main(_):
 	do_distort_images = should_distort_images(
 			FLAGS.flip_left_right, FLAGS.random_crop, FLAGS.random_scale,
 			FLAGS.random_brightness)
+	print (FLAGS.flip_left_right) 
 	print ('do_distort_images=', do_distort_images)
 
 	with tf.Session(graph=graph) as sess:
@@ -1079,7 +1080,6 @@ def main(_):
 		save_graph_to_file(sess, graph, FLAGS.output_graph)
 		with gfile.FastGFile(FLAGS.output_labels, 'w') as f:
 			f.write('\n'.join(image_lists.keys()) + '\n')
-
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
