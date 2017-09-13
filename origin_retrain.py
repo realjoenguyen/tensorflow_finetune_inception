@@ -975,7 +975,7 @@ def main(_):
 				FLAGS.summaries_dir + '/validation')
 
 		# Set up all our weights to their initial default values.
-		init = tf.global_variables_initializer()
+		init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
 		sess.run(init)
 
 		# Run the training for as many cycles as requested on the command line.
